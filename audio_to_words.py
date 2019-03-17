@@ -56,4 +56,4 @@ print("Time used:", end_time-start_time)
 with open('text.txt', 'wt', encoding='utf-8') as f:
     for text in results_text:
         f.write(text)
-        f.write(",")
+        f.write("，")
