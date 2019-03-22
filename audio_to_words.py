@@ -1,13 +1,10 @@
 from aip import AipSpeech
 from datetime import datetime
+from utils import get_file_content
+from audio_extract import audio_extract
 import os
 import multiprocessing
-
-
-# 读取文件
-def get_file_content(file_path):
-    with open(file_path, 'rb') as fp:
-        return fp.read()
+import subprocess
 
 
 class AudioToWords:
@@ -19,10 +16,12 @@ class AudioToWords:
 
     # 文件路径
     path = "./speech-vad-demo/output_pcm/"
-    dirs = os.listdir(path)
 
     # 识别结果
     results_text = []
+
+    def get_dirs(self):
+        return os.listdir(self.path)
 
     def audio_to_words(self, filename):
         data = self.client.asr(get_file_content(self.path + filename), 'pcm', 16000, {
@@ -35,6 +34,12 @@ class AudioToWords:
             return str(data["err_no"])
 
 
+# 音频提取
+audio_extract("./speech-vad-demo/media/" + "iq.mp4")
+# 音频分割
+command = "cd speech-vad-demo && sh build_and_run.sh"
+subprocess.call(command, shell=True)
+
 start_time = datetime.now()
 
 cores = multiprocessing.cpu_count()
@@ -42,9 +47,9 @@ pool = multiprocessing.Pool(processes=cores)
 
 # 多核并行处理，音频识别
 worker = AudioToWords()
-results_text = pool.map(worker.audio_to_words, worker.dirs)
+results_text = pool.map(worker.audio_to_words, worker.get_dirs())
 
-print("dirs:"+str(len(worker.dirs)))
+print("dirs:"+str(len(worker.get_dirs())))
 print("results_text:"+str(len(results_text)))
 print(results_text)
 
