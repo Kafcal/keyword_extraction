@@ -1,13 +1,11 @@
 #!/usr/bin/python
 # coding=utf-8
 # 采用TF-IDF方法提取文本关键词
-# http://scikit-learn.org/stable/modules/feature_extraction.html#tfidf-term-weighting
-import sys,codecs
+import codecs
 import pandas as pd
 import numpy as np
 import jieba.posseg
 import jieba.analyse
-from sklearn import feature_extraction
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.feature_extraction.text import CountVectorizer
 """
@@ -17,6 +15,8 @@ from sklearn.feature_extraction.text import CountVectorizer
            3、文本的关键字
            4、对应的tfidf矩阵
 """
+
+
 # 数据预处理操作：分词，去停用词，词性筛选
 def dataPrepos(text, stopkey):
     l = []
@@ -26,6 +26,7 @@ def dataPrepos(text, stopkey):
         if i.word not in stopkey and i.flag in pos:  # 去停用词 + 词性筛选
             l.append(i.word)
     return l
+
 
 # tf-idf获取文本top10关键词
 def getKeywords_tfidf(data,stopkey,topK):
@@ -80,6 +81,7 @@ def main():
     # tf-idf关键词抽取
     result = getKeywords_tfidf(data,stopkey,10)
     result.to_csv("result/keys_TFIDF.csv",index=False)
+
 
 if __name__ == '__main__':
     main()
