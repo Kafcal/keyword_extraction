@@ -124,3 +124,6 @@ dmypy.json
 
 /idea
 .idea/
+
+data/zhwiki-latest-pages-articles.xml.bz2
+data/wiki.*

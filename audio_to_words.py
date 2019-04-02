@@ -35,7 +35,7 @@ class AudioToWords:
 
 
 # 音频提取
-audio_extract("./speech-vad-demo/media/" + "iq.mp4")
+audio_extract("./speech-vad-demo/media/" + "wifi.mp4")
 # 音频分割
 command = "cd speech-vad-demo && sh build_and_run.sh"
 subprocess.call(command, shell=True)
