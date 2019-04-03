@@ -10,7 +10,6 @@ import os.path
 import sys
 import multiprocessing
 
-from gensim.corpora import WikiCorpus
 from gensim.models import Word2Vec
 from gensim.models.word2vec import LineSentence
 
@@ -34,7 +33,7 @@ if __name__ == '__main__':
 
     # 训练skip-gram模型
     model = Word2Vec(LineSentence(inp), size=400, window=5, min_count=5,
-                     workers=multiprocessing.cpu_count())
+                     workers=multiprocessing.cpu_count(), hs=1)
 
     # 保存模型
     model.save(outp1)

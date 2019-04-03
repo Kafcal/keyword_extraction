@@ -11,9 +11,9 @@ if __name__ == '__main__':
     fdir = 'data/'
     model = gensim.models.Word2Vec.load(fdir + 'wiki.zh.text.model')
 
-    word = model.most_similar("计算机")
+    word = model.most_similar("爱")
     for t in word:
-        print(t[0],t[1])
+        print(t[0], t[1])
 
     '''
     word = model.most_similar(positive=[u'皇上',u'国王'],negative=[u'皇后'])
