@@ -20,7 +20,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 # 数据预处理操作：分词，去停用词，词性筛选
 def dataPrepos(text, stopkey):
     l = []
-    pos = ['n', 'nz', 'v', 'vd', 'vn', 'l', 'a', 'd']  # 定义选取的词性
+    pos = ['n', 'nz', 'nt', 'nr', 'ns', 'eng']
+    # pos = ['n', 'nz', 'v', 'vd', 'vn', 'l', 'a', 'd']  # 定义选取的词性
     seg = jieba.posseg.cut(text)  # 分词
     for i in seg:
         if i.word not in stopkey and i.flag in pos:  # 去停用词 + 词性筛选

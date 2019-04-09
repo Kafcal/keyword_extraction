@@ -9,7 +9,7 @@ import math
 
 
 # 对词向量采用K-means聚类抽取TopK关键词
-def getkeywords_kmeans(data, topK):
+def get_keywords_kmeans(data, top_k):
     words = data["word"]  # 词汇
     vecs = data.ix[:, 1:]  # 向量表示2
 
@@ -53,36 +53,36 @@ def getkeywords_kmeans(data, topK):
     # plt.show()
 
     # 抽取排名前topK个词语作为文本关键词
-    wordlist = np.array(result['word'])  # 选择词汇列并转成数组格式
-    word_split = [wordlist[x] for x in range(0, topK)]  # 抽取前topK个词汇
+    word_list = np.array(result['word'])  # 选择词汇列并转成数组格式
+    word_split = [word_list[x] for x in range(0, top_k)]  # 抽取前topK个词汇
     word_split = " ".join(word_split)
     return word_split
 
 
 def main():
     # 读取数据集
-    dataFile = 'data/sample_data.csv'
-    articleData = pd.read_csv(dataFile)
+    data_file = 'data/sample_data.csv'
+    article_data = pd.read_csv(data_file)
     ids, titles, keys = [], [], []
 
-    rootdir = "result/vecs"  # 词向量文件根目录
-    fileList = os.listdir(rootdir)  #列出文件夹下所有的目录与文件
+    root_dir = "result/vecs"  # 词向量文件根目录
+    file_list = os.listdir(root_dir)  #列出文件夹下所有的目录与文件
     # 遍历文件
-    for i in range(len(fileList)):
-        filename = fileList[i]
-        path = os.path.join(rootdir, filename)
+    for i in range(len(file_list)):
+        filename = file_list[i]
+        path = os.path.join(root_dir, filename)
         if os.path.isfile(path):
             data = pd.read_csv(path, encoding='utf-8')  # 读取词向量文件数据
-            artile_keys = getkeywords_kmeans(data, 10)  # 聚类算法得到当前文件的关键词
+            article_keys = get_keywords_kmeans(data, 10)  # 聚类算法得到当前文件的关键词
             # 根据文件名获得文章id以及标题
-            (shortname, extension) = os.path.splitext(filename)  # 得到文件名和文件扩展名
-            t = shortname.split("_")
+            (short_name, extension) = os.path.splitext(filename)  # 得到文件名和文件扩展名
+            t = short_name.split("_")
             article_id = int(t[len(t)-1])  # 获得文章id
-            article_tit = articleData[articleData.id == article_id]['title']  # 获得文章标题
+            article_tit = article_data[article_data.id == article_id]['title']  # 获得文章标题
             article_tit = list(article_tit)[0]  # series转成字符串
             ids.append(article_id)
             titles.append(article_tit)
-            keys.append(artile_keys)
+            keys.append(article_keys)
     # 所有结果写入文件
     result = pd.DataFrame({"id": ids, "title": titles, "key": keys}, columns=['id', 'title', 'key'])
     result = result.sort_values(by="id", ascending=True)  # 排序
