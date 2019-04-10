@@ -25,10 +25,14 @@ def predict_proba(oword, iword):
 # 那么把所有词的p(content|wi)按照大小降序排列，越靠前的词就越重要，越应该看成是本文的关键词。
 
 
-def keywords(s):
-    # 抽出s中和与训练的model重叠的词,去停用词
+def keywords(s, title_keys):
+    # 抽出s中和与训练的model重叠的词
     s = [w for w in s if w in model]
     ws = {w: sum([predict_proba(u, w) for u in s]) for w in s}
+    # 在标题中的候选词给予一定权重
+    for w in s:
+        if w in title_keys:
+            ws[w] = ws[w] * 0.8
     return Counter(ws).most_common()
 
 
@@ -43,8 +47,8 @@ def main():
     content_list = [contents[k] for k in range(text_count)]
     keys = []
 
-    # 定义选取的词性(名词、专有名词、机构团体、人名、地名)
-    pos = ['n', 'nz', 'nt', 'nr', 'ns', 'eng']
+    # 定义选取的词性(名词、专有名词、机构团体、地名)
+    pos = ['n', 'nz', 'nt', 'ns', 'eng']
     stop_key = [w.strip() for w in codecs.open('data/stopWord.txt', 'r', encoding='utf-8').readlines()]
 
     # 遍历文件
@@ -57,7 +61,14 @@ def main():
         for i in seg:
             if i.word not in words and i.word not in stop_key and i.flag in pos:  #去重 + 去停用词 + 词性筛选
                 words.append(i.word)
-        x = pd.Series(keywords(words))
+
+        # 标题分词
+        seg_title = jieba.posseg.cut(title)
+        title_keys = []
+        for i in seg_title:
+            if i.word not in title_keys and i.word not in stop_key and i.flag in pos:  #去重 + 去停用词 + 词性筛选
+                title_keys.append(i.word)
+        x = pd.Series(keywords(words, title_keys))
 
         # 输出最重要的前10个词
         print(x[0:10])

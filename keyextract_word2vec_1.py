@@ -32,7 +32,7 @@ def get_words_vec(word_list, model):
 # 数据预处理操作：分词，去停用词，词性筛选
 def data_pre(text, stop_key):
     words = []
-    pos = ['n', 'nz', 'nt', 'nr', 'ns', 'vn']
+    pos = ['n', 'nz', 'nt', 'ns', 'eng']
     # pos = ['n', 'nz', 'v', 'vd', 'vn', 'l', 'a', 'd']  # 定义选取的词性
     seg = jieba.posseg.cut(text)  # 分词
     for i in seg:

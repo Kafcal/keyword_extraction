@@ -20,7 +20,7 @@ def getKeywords_textrank(data,topK):
         text = '%s。%s' % (titleList[index], abstractList[index]) # 拼接标题和摘要
         jieba.analyse.set_stop_words("data/stopWord.txt") # 加载自定义停用词表
         print("\"",titleList[index],"\"" , " 10 Keywords - TextRank :")
-        keywords = jieba.analyse.textrank(text, topK=topK, allowPOS=('n','nz','v','vd','vn','l','a','d'))  # TextRank关键词提取，词性筛选
+        keywords = jieba.analyse.textrank(text, topK=topK, allowPOS=('n', 'nz', 'nt', 'nr', 'ns', 'eng'))  # TextRank关键词提取，词性筛选
         word_split = " ".join(keywords)
         print(word_split)
         keys.append(word_split)
