@@ -14,13 +14,14 @@ import jieba.analyse
 
 # 处理标题和摘要，提取关键词
 def getKeywords_textrank(data,topK):
-    idList,titleList,abstractList = data['id'],data['title'],data['content']
+    idList, titleList, abstractList = data['id'], data['title'], data['content']
     ids, titles, keys = [], [], []
     for index in range(len(idList)):
-        text = '%s。%s' % (titleList[index], abstractList[index]) # 拼接标题和摘要
-        jieba.analyse.set_stop_words("data/stopWord.txt") # 加载自定义停用词表
-        print("\"",titleList[index],"\"" , " 10 Keywords - TextRank :")
-        keywords = jieba.analyse.textrank(text, topK=topK, allowPOS=('n', 'nz', 'nt', 'nr', 'ns', 'eng'))  # TextRank关键词提取，词性筛选
+        text = '%s。%s' % (titleList[index]*2, abstractList[index]) # 拼接标题和摘要
+        jieba.analyse.set_stop_words("data/stopWord.txt")  # 加载自定义停用词表
+        print("\"", titleList[index], "\"", " 10 Keywords - TextRank :")
+        # TextRank关键词提取，词性筛选
+        keywords = jieba.analyse.textrank(text, topK=topK, allowPOS=('n', 'nz', 'nt', 'nr', 'ns', 'eng', 'nrt'))
         word_split = " ".join(keywords)
         print(word_split)
         keys.append(word_split)
@@ -35,7 +36,7 @@ def main():
     dataFile = 'data/sample_data.csv'
     data = pd.read_csv(dataFile)
     result = getKeywords_textrank(data,10)
-    result.to_csv("result/keys_TextRank.csv",index=False)
+    result.to_csv("result/keys_TextRank.csv", index=False)
 
 
 if __name__ == '__main__':

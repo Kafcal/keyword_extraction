@@ -32,7 +32,7 @@ def keywords(s, title_keys):
     # 在标题中的候选词给予一定权重
     for w in s:
         if w in title_keys:
-            ws[w] = ws[w] * 0.8
+            ws[w] = ws[w] * 0.7
     return Counter(ws).most_common()
 
 
@@ -47,8 +47,8 @@ def main():
     content_list = [contents[k] for k in range(text_count)]
     keys = []
 
-    # 定义选取的词性(名词、专有名词、机构团体、地名)
-    pos = ['n', 'nz', 'nt', 'ns', 'eng']
+    # 定义选取的词性(名词、专有名词、机构团体、地名、英文单词)
+    pos = ['n', 'nz', 'nt', 'ns', 'eng', 'nrt']
     stop_key = [w.strip() for w in codecs.open('data/stopWord.txt', 'r', encoding='utf-8').readlines()]
 
     # 遍历文件
@@ -59,7 +59,8 @@ def main():
         seg = jieba.posseg.cut(data_)  # 分词
         words = []
         for i in seg:
-            if i.word not in words and i.word not in stop_key and i.flag in pos:  #去重 + 去停用词 + 词性筛选
+            # 去重 + 去停用词 + 词性筛选 + 限制候选词长度
+            if i.word not in words and i.word not in stop_key and i.flag in pos and len(i.word) >= 2:
                 words.append(i.word)
 
         # 标题分词

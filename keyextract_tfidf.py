@@ -20,11 +20,10 @@ from sklearn.feature_extraction.text import CountVectorizer
 # 数据预处理操作：分词，去停用词，词性筛选
 def dataPrepos(text, stopkey):
     l = []
-    pos = ['n', 'nz', 'nt', 'nr', 'ns', 'eng']
-    # pos = ['n', 'nz', 'v', 'vd', 'vn', 'l', 'a', 'd']  # 定义选取的词性
+    pos = ['n', 'nz', 'nt', 'nr', 'ns', 'eng', 'nrt']  # 定义选取的词性
     seg = jieba.posseg.cut(text)  # 分词
     for i in seg:
-        if i.word not in stopkey and i.flag in pos:  # 去停用词 + 词性筛选
+        if i.word not in stopkey and i.flag in pos:  #去停用词 + 词性筛选
             l.append(i.word)
     return l
 
@@ -53,23 +52,34 @@ def getKeywords_tfidf(data,stopkey,topK):
     ids, titles, keys = [], [], []
     for i in range(len(weight)):
         print(u"-------这里输出第", i+1 , u"篇文本的词语tf-idf------")
+        title = titleList[i]
         ids.append(idList[i])
-        titles.append(titleList[i])
-        df_word,df_weight = [],[] # 当前文章的所有词汇列表、词汇对应权重列表
+        titles.append(title)
+
+        # 标题分词
+        title_keys = dataPrepos(title, stopkey)
+
+        df_word, df_weight = [], []  # 当前文章的所有词汇列表、词汇对应权重列表
         for j in range(len(word)):
-            print(word[j],weight[i][j])
+            print(word[j], weight[i][j])
             df_word.append(word[j])
-            df_weight.append(weight[i][j])
-        df_word = pd.DataFrame(df_word,columns=['word'])
-        df_weight = pd.DataFrame(df_weight,columns=['weight'])
-        word_weight = pd.concat([df_word, df_weight], axis=1) # 拼接词汇列表和权重列表
-        word_weight = word_weight.sort_values(by="weight",ascending = False) # 按照权重值降序排列
-        keyword = np.array(word_weight['word']) # 选择词汇列并转成数组格式
-        word_split = [keyword[x] for x in range(0,topK)] # 抽取前topK个词汇作为关键词
+
+            # 给予标题中的候选词一定的权重
+            if word[j] in title_keys:
+                df_weight.append(weight[i][j] * 1.5)
+            else:
+                df_weight.append(weight[i][j])
+
+        df_word = pd.DataFrame(df_word, columns=['word'])
+        df_weight = pd.DataFrame(df_weight, columns=['weight'])
+        word_weight = pd.concat([df_word, df_weight], axis=1)  # 拼接词汇列表和权重列表
+        word_weight = word_weight.sort_values(by="weight", ascending=False)  # 按照权重值降序排列
+        keyword = np.array(word_weight['word'])  # 选择词汇列并转成数组格式
+        word_split = [keyword[x] for x in range(0, topK)]  # 抽取前topK个词汇作为关键词
         word_split = " ".join(word_split)
         keys.append(word_split)
 
-    result = pd.DataFrame({"id": ids, "title": titles, "key": keys},columns=['id','title','key'])
+    result = pd.DataFrame({"id": ids, "title": titles, "key": keys},columns=['id', 'title', 'key'])
     return result
 
 
@@ -80,8 +90,8 @@ def main():
     # 停用词表
     stopkey = [w.strip() for w in codecs.open('data/stopWord.txt', 'r', encoding='utf-8').readlines()]
     # tf-idf关键词抽取
-    result = getKeywords_tfidf(data,stopkey,10)
-    result.to_csv("result/keys_TFIDF.csv",index=False)
+    result = getKeywords_tfidf(data,stopkey, 10)
+    result.to_csv("result/keys_TFIDF.csv", index=False)
 
 
 if __name__ == '__main__':
