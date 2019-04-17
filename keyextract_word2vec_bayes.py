@@ -79,7 +79,7 @@ def main():
 
     # 所有结果写入文件
     result = pd.DataFrame({"id": id_list, "title": title_list, "key": keys}, columns=['id', 'title', 'key'])
-    result.to_csv("result/keys_word2vec_new.csv", index=False)
+    result.to_csv("result/keys_word2vec_bayes.csv", index=False)
 
 
 if __name__ == '__main__':
