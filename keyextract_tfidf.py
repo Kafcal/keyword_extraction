@@ -85,7 +85,7 @@ def getKeywords_tfidf(data,stopkey,topK):
 
 def main():
     # 读取数据集
-    dataFile = 'data/sample_data.csv'
+    dataFile = 'data/text_data.csv'
     data = pd.read_csv(dataFile)
     # 停用词表
     stopkey = [w.strip() for w in codecs.open('data/stopWord.txt', 'r', encoding='utf-8').readlines()]

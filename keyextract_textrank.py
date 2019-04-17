@@ -33,7 +33,7 @@ def getKeywords_textrank(data,topK):
 
 
 def main():
-    dataFile = 'data/sample_data.csv'
+    dataFile = 'data/text_data.csv'
     data = pd.read_csv(dataFile)
     result = getKeywords_textrank(data,10)
     result.to_csv("result/keys_TextRank.csv", index=False)

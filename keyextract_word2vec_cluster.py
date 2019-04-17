@@ -64,14 +64,14 @@ def get_keywords_kmeans(word_list, top_k, title):
 
     # 抽取排名前topK个词语作为文本关键词
     word_list = np.array(result[0])  # 选择词汇列并转成数组格式
-    word_split = [word_list[x] for x in range(0, top_k)]  # 抽取前topK个词汇
+    word_split = [word_list[x] for x in range(0, min(top_k, len(word_list)))]  # 抽取前topK个词汇
     word_split = " ".join(word_split)
     return word_split
 
 
 def main():
     # 读取数据集
-    data_path = 'data/sample_data.csv'
+    data_path = 'data/text_data.csv'
     data = pd.read_csv(data_path)
 
     ids, titles, contents = data["id"], data["title"], data["content"]
@@ -109,5 +109,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-

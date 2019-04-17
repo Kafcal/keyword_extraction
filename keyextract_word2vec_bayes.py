@@ -38,7 +38,7 @@ def keywords(s, title_keys):
 
 def main():
     # 读取数据集
-    data_path = 'data/sample_data.csv'
+    data_path = 'data/text_data.csv'
     data = pd.read_csv(data_path)
     ids, titles, contents = data["id"], data["title"], data["content"]
     text_count = len(ids)
@@ -73,7 +73,7 @@ def main():
 
         # 输出最重要的前10个词
         print(x[0:10])
-        keys_ = [x[0:10][i][0] for i in range(10)]
+        keys_ = [x[0:10][i][0] for i in range(min(10, len(x)))]
         result = " ".join(keys_)
         keys.append(result)
 
