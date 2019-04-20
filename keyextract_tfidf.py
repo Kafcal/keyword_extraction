@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # coding=utf-8
-# 采用TF-IDF方法提取文本关键词
 import codecs
 import pandas as pd
 import numpy as np
@@ -51,7 +50,7 @@ def getKeywords_tfidf(data,stopkey,topK):
     # 5、打印词语权重
     ids, titles, keys = [], [], []
     for i in range(len(weight)):
-        print(u"-------这里输出第", i+1 , u"篇文本的词语tf-idf------")
+        print(u"-------这里输出第", i+1, u"篇文本的词语tf-idf------")
         title = titleList[i]
         ids.append(idList[i])
         titles.append(title)
@@ -83,16 +82,26 @@ def getKeywords_tfidf(data,stopkey,topK):
     return result
 
 
-def main():
+def tfidf(data_path, save_path):
     # 读取数据集
-    dataFile = 'data/text_data.csv'
-    data = pd.read_csv(dataFile)
+    data = pd.read_csv(data_path)
     # 停用词表
     stopkey = [w.strip() for w in codecs.open('data/stopWord.txt', 'r', encoding='utf-8').readlines()]
     # tf-idf关键词抽取
-    result = getKeywords_tfidf(data,stopkey, 10)
-    result.to_csv("result/keys_TFIDF.csv", index=False)
+    result = getKeywords_tfidf(data, stopkey, 10)
+    result.to_csv(save_path, index=False)
 
 
-if __name__ == '__main__':
-    main()
+# def main():
+#     # 读取数据集
+#     dataFile = 'data/text_data.csv'
+#     data = pd.read_csv(dataFile)
+#     # 停用词表
+#     stopkey = [w.strip() for w in codecs.open('data/stopWord.txt', 'r', encoding='utf-8').readlines()]
+#     # tf-idf关键词抽取
+#     result = getKeywords_tfidf(data,stopkey, 10)
+#     result.to_csv("result/keys_TFIDF.csv", index=False)
+#
+#
+# if __name__ == '__main__':
+#     main()

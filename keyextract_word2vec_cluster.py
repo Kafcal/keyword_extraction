@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # coding=utf-8
-# 采用Word2Vec词聚类方法抽取关键词2——根据候选关键词的词向量进行聚类分析
 import pandas as pd
 import numpy as np
 import math
@@ -69,9 +68,8 @@ def get_keywords_kmeans(word_list, top_k, title):
     return word_split
 
 
-def main():
+def word2vec_cluster(data_path, save_path):
     # 读取数据集
-    data_path = 'data/text_data.csv'
     data = pd.read_csv(data_path)
 
     ids, titles, contents = data["id"], data["title"], data["content"]
@@ -104,8 +102,46 @@ def main():
     # 所有结果写入文件
     result = pd.DataFrame({"id": id_list, "title": title_list, "key": keys}, columns=['id', 'title', 'key'])
     result = result.sort_values(by="id", ascending=True)  # 排序
-    result.to_csv("result/keys_word2vec_cluster.csv", index=False)
+    result.to_csv(save_path, index=False)
 
 
-if __name__ == '__main__':
-    main()
+# def main():
+#     # 读取数据集
+#     data_path = 'data/text_data.csv'
+#     data = pd.read_csv(data_path)
+#
+#     ids, titles, contents = data["id"], data["title"], data["content"]
+#     text_count = len(ids)
+#     id_list = [ids[k] for k in range(text_count)]
+#     title_list = [titles[k] for k in range(text_count)]
+#     content_list = [contents[k] for k in range(text_count)]
+#
+#     # 定义选取的词性(名词、专有名词、机构团体、地名、英文单词)
+#     pos = ['n', 'nz', 'nt', 'ns', 'eng', 'nrt']
+#     stop_key = [w.strip() for w in codecs.open('data/stopWord.txt', 'r', encoding='utf-8').readlines()]
+#
+#     keys = []
+#     # 遍历文件
+#     for i in range(len(id_list)):
+#         title = title_list[i]
+#         content = content_list[i]
+#         data_ = title + " " + content
+#         seg = jieba.posseg.cut(data_)  # 分词
+#         words = []
+#         for k in seg:
+#             # 去重 + 去停用词 + 词性筛选 + 限制候选词长度
+#             if k.word not in words and k.word not in stop_key and k.flag in pos and len(k.word) >= 2:
+#                 words.append(k.word)
+#
+#         words = [w for w in words if w in model]
+#         article_keys = get_keywords_kmeans(words, 10, title)  # 聚类算法得到当前文件的关键词
+#         keys.append(article_keys)
+#
+#     # 所有结果写入文件
+#     result = pd.DataFrame({"id": id_list, "title": title_list, "key": keys}, columns=['id', 'title', 'key'])
+#     result = result.sort_values(by="id", ascending=True)  # 排序
+#     result.to_csv("result/keys_word2vec_cluster.csv", index=False)
+#
+#
+# if __name__ == '__main__':
+#     main()

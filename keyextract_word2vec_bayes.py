@@ -36,9 +36,8 @@ def keywords(s, title_keys):
     return Counter(ws).most_common()
 
 
-def main():
+def word2vec_bayes(data_path, save_path):
     # 读取数据集
-    data_path = 'data/text_data.csv'
     data = pd.read_csv(data_path)
     ids, titles, contents = data["id"], data["title"], data["content"]
     text_count = len(ids)
@@ -67,7 +66,7 @@ def main():
         seg_title = jieba.posseg.cut(title)
         title_keys = []
         for i in seg_title:
-            if i.word not in title_keys and i.word not in stop_key and i.flag in pos:  #去重 + 去停用词 + 词性筛选
+            if i.word not in title_keys and i.word not in stop_key and i.flag in pos:  # 去重 + 去停用词 + 词性筛选
                 title_keys.append(i.word)
         x = pd.Series(keywords(words, title_keys))
 
@@ -79,8 +78,54 @@ def main():
 
     # 所有结果写入文件
     result = pd.DataFrame({"id": id_list, "title": title_list, "key": keys}, columns=['id', 'title', 'key'])
-    result.to_csv("result/keys_word2vec_bayes.csv", index=False)
+    result.to_csv(save_path, index=False)
 
 
-if __name__ == '__main__':
-    main()
+# def main():
+#     # 读取数据集
+#     data_path = 'data/text_data.csv'
+#     data = pd.read_csv(data_path)
+#     ids, titles, contents = data["id"], data["title"], data["content"]
+#     text_count = len(ids)
+#     id_list = [ids[k] for k in range(text_count)]
+#     title_list = [titles[k] for k in range(text_count)]
+#     content_list = [contents[k] for k in range(text_count)]
+#     keys = []
+#
+#     # 定义选取的词性(名词、专有名词、机构团体、地名、英文单词)
+#     pos = ['n', 'nz', 'nt', 'ns', 'eng', 'nrt']
+#     stop_key = [w.strip() for w in codecs.open('data/stopWord.txt', 'r', encoding='utf-8').readlines()]
+#
+#     # 遍历文件
+#     for k in range(text_count):
+#         title = title_list[k]
+#         content = content_list[k]
+#         data_ = title + " " + content
+#         seg = jieba.posseg.cut(data_)  # 分词
+#         words = []
+#         for i in seg:
+#             # 去重 + 去停用词 + 词性筛选 + 限制候选词长度
+#             if i.word not in words and i.word not in stop_key and i.flag in pos and len(i.word) >= 2:
+#                 words.append(i.word)
+#
+#         # 标题分词
+#         seg_title = jieba.posseg.cut(title)
+#         title_keys = []
+#         for i in seg_title:
+#             if i.word not in title_keys and i.word not in stop_key and i.flag in pos:  #去重 + 去停用词 + 词性筛选
+#                 title_keys.append(i.word)
+#         x = pd.Series(keywords(words, title_keys))
+#
+#         # 输出最重要的前10个词
+#         print(x[0:10])
+#         keys_ = [x[0:10][i][0] for i in range(min(10, len(x)))]
+#         result = " ".join(keys_)
+#         keys.append(result)
+#
+#     # 所有结果写入文件
+#     result = pd.DataFrame({"id": id_list, "title": title_list, "key": keys}, columns=['id', 'title', 'key'])
+#     result.to_csv("result/keys_word2vec_bayes.csv", index=False)
+#
+#
+# if __name__ == '__main__':
+#     main()

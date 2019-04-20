@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # coding=utf-8
-# 采用TextRank方法提取文本关键词
 import pandas as pd
 import jieba.analyse
 """
@@ -32,12 +31,18 @@ def getKeywords_textrank(data,topK):
     return result
 
 
-def main():
-    dataFile = 'data/text_data.csv'
-    data = pd.read_csv(dataFile)
-    result = getKeywords_textrank(data,10)
-    result.to_csv("result/keys_TextRank.csv", index=False)
+def textrank(data_path, save_path):
+    data = pd.read_csv(data_path)
+    result = getKeywords_textrank(data, 10)
+    result.to_csv(save_path, index=False)
 
 
-if __name__ == '__main__':
-    main()
+# def main():
+#     dataFile = 'data/text_data.csv'
+#     data = pd.read_csv(dataFile)
+#     result = getKeywords_textrank(data,10)
+#     result.to_csv("result/keys_TextRank.csv", index=False)
+#
+#
+# if __name__ == '__main__':
+#     main()
