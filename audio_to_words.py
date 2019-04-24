@@ -4,7 +4,6 @@ from utils import get_file_content
 from audio_extract import audio_extract
 import os
 import multiprocessing
-import subprocess
 import pandas as pd
 
 
@@ -39,8 +38,8 @@ def speech_recognition(video_name, video_title):
     # 音频提取
     audio_extract("./speech-vad-demo/media/" + video_name)
     # 音频分割
-    command = "cd speech-vad-demo && sh build_and_run.sh"
-    subprocess.call(command, shell=True)
+    # command = "cd speech-vad-demo && sh build_and_run.sh"
+    # subprocess.call(command, shell=True)
 
     start_time = datetime.now()
 
@@ -72,44 +71,3 @@ def speech_recognition(video_name, video_title):
 
     result = pd.DataFrame({"id": ids, "title": titles, "content": contents}, columns=['id', 'title', 'content'])
     result.to_csv("data/video_data.csv", index=False)
-
-
-# video_name = "solink.mp4"
-# video_title = "SoLink学术助手小程序"
-#
-# # 音频提取
-# audio_extract("./speech-vad-demo/media/" + video_name)
-# # 音频分割
-# command = "cd speech-vad-demo && sh build_and_run.sh"
-# subprocess.call(command, shell=True)
-#
-# start_time = datetime.now()
-#
-# cores = multiprocessing.cpu_count()
-# pool = multiprocessing.Pool(processes=cores)
-#
-# # 多核并行处理，音频识别
-# worker = AudioToWords()
-# results_text = pool.map(worker.audio_to_words, worker.get_dirs())
-#
-# print("dirs:"+str(len(worker.get_dirs())))
-# print("results_text:"+str(len(results_text)))
-# print(results_text)
-#
-# end_time = datetime.now()
-# print("Time used:", end_time-start_time)
-#
-# results_text = "，".join(results_text)
-#
-# # 识别结果写入video_data.csv
-# data_path = 'data/video_data.csv'
-# data = pd.read_csv(data_path)
-#
-# ids, titles, contents = list(data["id"]), list(data["title"]), list(data["content"])
-# data_count = len(ids)
-# ids.append(data_count+1)
-# titles.append(video_title)
-# contents.append(results_text)
-#
-# result = pd.DataFrame({"id": ids, "title": titles, "content": contents}, columns=['id', 'title', 'content'])
-# result.to_csv("data/video_data.csv", index=False)
