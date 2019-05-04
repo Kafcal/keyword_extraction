@@ -17,6 +17,6 @@ seg = jieba.posseg.cut("计算机视觉")
 for i in seg:
     print(i.word, i.flag)
 
-keys = jieba.cut('卷积神经网络', cut_all=True)
+keys = jieba.lcut('计算机图形学')
 for key in keys:
     print(key)

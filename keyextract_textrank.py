@@ -37,12 +37,12 @@ def textrank(data_path, save_path):
     result.to_csv(save_path, index=False)
 
 
-# def main():
-#     dataFile = 'data/text_data.csv'
-#     data = pd.read_csv(dataFile)
-#     result = getKeywords_textrank(data,10)
-#     result.to_csv("result/keys_TextRank.csv", index=False)
-#
-#
-# if __name__ == '__main__':
-#     main()
+def main():
+    dataFile = 'data/text_data.csv'
+    data = pd.read_csv(dataFile)
+    result = getKeywords_textrank(data,10)
+    result.to_csv("result/keys_TextRank.csv", index=False)
+
+
+if __name__ == '__main__':
+    main()

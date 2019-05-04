@@ -92,16 +92,16 @@ def tfidf(data_path, save_path):
     result.to_csv(save_path, index=False)
 
 
-# def main():
-#     # 读取数据集
-#     dataFile = 'data/text_data.csv'
-#     data = pd.read_csv(dataFile)
-#     # 停用词表
-#     stopkey = [w.strip() for w in codecs.open('data/stopWord.txt', 'r', encoding='utf-8').readlines()]
-#     # tf-idf关键词抽取
-#     result = getKeywords_tfidf(data,stopkey, 10)
-#     result.to_csv("result/keys_TFIDF.csv", index=False)
-#
-#
-# if __name__ == '__main__':
-#     main()
+def main():
+    # 读取数据集
+    dataFile = 'data/text_data.csv'
+    data = pd.read_csv(dataFile)
+    # 停用词表
+    stopkey = [w.strip() for w in codecs.open('data/stopWord.txt', 'r', encoding='utf-8').readlines()]
+    # tf-idf关键词抽取
+    result = getKeywords_tfidf(data,stopkey, 10)
+    result.to_csv("result/keys_TFIDF.csv", index=False)
+
+
+if __name__ == '__main__':
+    main()
