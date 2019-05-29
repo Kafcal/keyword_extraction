@@ -53,7 +53,7 @@ def keyword_extract(title, text_content):
     keys = []
     for i in range(10):
         keys.append(result[i][0])
-        # if scores[i] >= 0.06:
+        # if scores[i] >= 0.08:
         #     keys.append(result[i][0])
         # else:
         #     if len(keys) < 3:

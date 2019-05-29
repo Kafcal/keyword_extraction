@@ -2,6 +2,10 @@
 import pandas as pd
 
 
+def f_measure(p, r):
+    return 1.64*p*r/(0.64*p+r)
+
+
 result_tfidf = pd.read_csv('result/keys_TFIDF.csv')
 result_textrank = pd.read_csv('result/keys_TextRank.csv')
 result_word2vec_bayes = pd.read_csv('result/keys_word2vec_bayes.csv')
@@ -120,14 +124,18 @@ accuracy_tfidf.append(float(total_right_cnt_tfidf/total_key_cnt_tfidf))
 accuracy_textrank.append(float(total_right_cnt_textrank/total_key_cnt_textrank))
 accuracy_word2vec_bayes.append(float(total_right_cnt_word2vec_bayes/total_key_cnt_word2vec_bayes))
 accuracy_word2vec_cluster.append(float(total_right_cnt_word2vec_cluster/total_key_cnt_word2vec_cluster))
-accuracy_tfidf_textrank.append(float(total_right_cnt_tfidf_textrank/total_key_cnt_tfidf_textrank))
+
+total_accuracy_tfidf_textrank = float(total_right_cnt_tfidf_textrank/total_key_cnt_tfidf_textrank)
+accuracy_tfidf_textrank.append(total_accuracy_tfidf_textrank)
 
 # 统计总的召回率
 recall_rate_tfidf.append(float(total_right_cnt_tfidf/total_answer_cnt))
 recall_rate_textrank.append(float(total_right_cnt_textrank/total_answer_cnt))
 recall_rate_word2vec_bayes.append(float(total_right_cnt_word2vec_bayes/total_answer_cnt))
 recall_rate_word2vec_cluster.append(float(total_right_cnt_word2vec_cluster/total_answer_cnt))
-recall_rate_tfidf_textrank.append(float(total_right_cnt_tfidf_textrank/total_answer_cnt))
+
+total_recall_tfidf_textrank = float(total_right_cnt_tfidf_textrank/total_answer_cnt)
+recall_rate_tfidf_textrank.append(total_recall_tfidf_textrank)
 
 # 分析结果写入文件
 result1 = pd.DataFrame({"id": id_list, "title": title_list, "accuracy": accuracy_tfidf, "recall_rate": recall_rate_tfidf},
@@ -161,5 +169,8 @@ result1.to_csv("result/analyse_tfidf_textrank.csv", index=False)
 print("tfidf", "标注数量:", total_key_cnt_tfidf, "正确数量:", total_right_cnt_tfidf, "答案数量", total_answer_cnt)
 print("textrank", "标注数量:", total_key_cnt_textrank, "正确数量:", total_right_cnt_textrank, "答案数量", total_answer_cnt)
 print("word2vec_bayes", "标注数量:", total_key_cnt_word2vec_bayes, "正确数量:", total_right_cnt_word2vec_bayes, "答案数量", total_answer_cnt)
-print("word2vec_cluster", "标注数量:", total_key_cnt_word2vec_cluster, "正确数量:", total_right_cnt_word2vec_cluster, "答案数量", total_answer_cnt)
-print("tfidf_textrank", "标注数量:", total_key_cnt_tfidf_textrank, "正确数量:", total_right_cnt_tfidf_textrank, "答案数量", total_answer_cnt)
+print("word2vec_cluster", "标注数量:", total_key_cnt_word2vec_cluster, "正确数量:", total_right_cnt_word2vec_cluster,
+      "答案数量", total_answer_cnt)
+print("tfidf_textrank", "标注数量:", total_key_cnt_tfidf_textrank, "正确数量:", total_right_cnt_tfidf_textrank, "答案数量", total_answer_cnt,
+      "accuracy:", total_accuracy_tfidf_textrank, "recall:", total_recall_tfidf_textrank,
+      "f_measure:", f_measure(total_accuracy_tfidf_textrank, total_recall_tfidf_textrank))
